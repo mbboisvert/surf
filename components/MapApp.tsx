@@ -48,8 +48,11 @@ export default function MapApp() {
     const map = new maplibregl.Map({
       container: ref.current,
       style: "https://tiles.openfreemap.org/styles/positron",
-      center: [8, 18],
-      zoom: 1.55,
+      bounds: [
+        [-124.85, 24.4],
+        [-66.89, 49.38],
+      ],
+      fitBoundsOptions: { padding: { top: 72, bottom: 28, left: 28, right: 28 } },
       attributionControl: false,
       dragRotate: false,
       pitchWithRotate: false,
@@ -223,7 +226,7 @@ export default function MapApp() {
 
   return (
     <div className="map-shell" data-open={nearest.length ? (selectedId ? "detail" : "list") : "0"}>
-      <div ref={ref} className="map" aria-label="World map. Click to find the nearest breaks." />
+      <div ref={ref} className="map" aria-label="Map of the contiguous United States. Click to find the nearest breaks." />
       {nearest.length === 0 ? (
         <p className="hint">{loadError ? "Breaks didn’t load." : <><span className="desk">Click the map</span><span className="phone">Tap the map</span></>}</p>
       ) : (
