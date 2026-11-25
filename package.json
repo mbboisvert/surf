@@ -1,0 +1,32 @@
+{
+  "name": "surfing",
+  "version": "1.0.0",
+  "private": true,
+  "description": "A public surf forecast.",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "test": "tsx --test test/*.test.ts",
+    "data": "python3 scripts/build_breaks.py"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "@fontsource/ibm-plex-sans": "^5.2.6",
+    "@fontsource/newsreader": "^5.2.8",
+    "fast-xml-parser": "^4.5.1",
+    "maplibre-gl": "^5.6.1",
+    "next": "^15.5.4",
+    "react": "^19.1.1",
+    "react-dom": "^19.1.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22.19.0",
+    "@types/react": "^19.1.12",
+    "@types/react-dom": "^19.1.9",
+    "tsx": "^4.20.5",
+    "typescript": "^5.9.2"
+  }
+}
