@@ -73,9 +73,16 @@ export default function MapApp() {
         type: "circle",
         source: "spots",
         paint: {
-          "circle-radius": ["case", ["==", ["get", "selected"], 1], 7, 4.5],
+          "circle-radius": [
+            "case",
+            ["==", ["get", "selected"], 1],
+            7,
+            ["==", ["get", "listed"], 1],
+            5.5,
+            4,
+          ],
           "circle-color": ["case", ["==", ["get", "selected"], 1], "#1f4b46", "#1c1915"],
-          "circle-stroke-width": 2,
+          "circle-stroke-width": 1.5,
           "circle-stroke-color": "#f4f1ea",
         },
       });
@@ -88,11 +95,8 @@ export default function MapApp() {
       map.on("click", (event) => {
         const hits = map.queryRenderedFeatures(event.point, { layers: ["spots"] });
         const id = hits[0]?.properties?.id;
-        if (id) {
-          setSelectedId(String(id));
-          return;
-        }
         pickRef.current(event.lngLat.lat, event.lngLat.lng);
+        if (id) setSelectedId(String(id));
       });
       setReady(true);
     });
@@ -147,15 +151,22 @@ export default function MapApp() {
     const map = mapRef.current;
     if (!map || !ready) return;
     const source = map.getSource("spots") as GeoJSONSource | undefined;
+    const listed = new Set(nearest.map((row) => row.spot.id));
     source?.setData({
       type: "FeatureCollection",
-      features: nearest.map((row) => ({
-        type: "Feature" as const,
-        geometry: { type: "Point" as const, coordinates: [row.spot.lon, row.spot.lat] },
-        properties: { id: row.spot.id, selected: row.spot.id === selectedId ? 1 : 0 },
-      })),
+      features: breaks
+        .filter((spot) => spot.name)
+        .map((spot) => ({
+          type: "Feature" as const,
+          geometry: { type: "Point" as const, coordinates: [spot.lon, spot.lat] },
+          properties: {
+            id: spot.id,
+            selected: spot.id === selectedId ? 1 : 0,
+            listed: listed.has(spot.id) ? 1 : 0,
+          },
+        })),
     });
-  }, [nearest, selectedId, ready]);
+  }, [breaks, nearest, selectedId, ready]);
 
   const forecastKey = nearest.map((row) => row.spot.id).join("|");
 
