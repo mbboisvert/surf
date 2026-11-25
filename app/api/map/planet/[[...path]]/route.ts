@@ -4,7 +4,7 @@ const UPSTREAM = "https://tiles.openfreemap.org/planet";
 
 type Params = { path?: string[] };
 
-export async function GET(request: Request, context: { params: Promise<Params> | Params }) {
+export async function GET(request: Request, context: { params: Promise<Params> }) {
   const { path = [] } = await context.params;
   const suffix = safePlanetPath(path);
   if (suffix === null) return new Response("Not found", { status: 404 });
