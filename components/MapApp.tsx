@@ -3,6 +3,7 @@
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import maplibregl, { type GeoJSONSource, type Map } from "maplibre-gl";
 import { nearestBreaks } from "@/lib/geo";
+import { mapTileRequest } from "@/lib/map-tiles";
 import type { BreakSpot, Forecast } from "@/lib/types";
 import { Panel } from "./Panel";
 
@@ -54,6 +55,7 @@ export default function MapApp() {
       ],
       fitBoundsOptions: { padding: { top: 72, bottom: 28, left: 28, right: 28 } },
       attributionControl: false,
+      transformRequest: (url) => mapTileRequest(url, window.location.origin),
       dragRotate: false,
       pitchWithRotate: false,
       minZoom: 1.15,
